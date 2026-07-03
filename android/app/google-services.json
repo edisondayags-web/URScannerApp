@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "12289506045",
+    "project_id": "ur-scanner-b3420",
+    "storage_bucket": "ur-scanner-b3420.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12289506045:android:a671524951eed00c9adc94",
+        "android_client_info": {
+          "package_name": "com.urscanner.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATOJ2eQACbpHmSP0mZ_aoeRV4EEI_YxMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12289506045:android:1f95ef5f7cdaf8c49adc94",
+        "android_client_info": {
+          "package_name": "com.urscanner.apps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATOJ2eQACbpHmSP0mZ_aoeRV4EEI_YxMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
