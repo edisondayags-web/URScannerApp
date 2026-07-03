@@ -82,7 +82,7 @@ if (!firebase.apps.length) {
   });
 
   // ADDED: Firebase App Check - PROPER PROVIDER (Play Integrity)
-  if (!__DEV__) {
+  if (false && !__DEV__) {
     appCheck().initializeAppCheck({
       provider: appCheck.PlayIntegrityAppCheckProvider, // <- TAMA NA TO
       isTokenAutoRefreshEnabled: true,
@@ -402,7 +402,7 @@ function App() {
     isMountedRef.current = true;
 
     // ADDED: Play Integrity proper check
-    if (Platform.OS === 'android' &&!__DEV__) {
+    if (false) {
       check()
   .then(() => {
           Crashlytics.log('Play Integrity pass');
