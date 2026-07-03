@@ -8,7 +8,7 @@ import { Camera, useCameraDevices, useCameraPermission, useCodeScanner, CameraDe
 import { MMKV } from 'react-native-mmkv';
 import { FlashList } from '@shopify/flash-list';
 import NetInfo from '@react-native-community/netinfo';
-import * as Haptics from 'expo-haptics';
+import HapticFeedback from 'react-native-haptic-feedback';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -67,7 +67,7 @@ try {
 
 function triggerHaptic(style: 'light' | 'heavy' = 'light') {
   try {
-    Haptics.impactAsync(style === 'heavy'? Haptics.ImpactFeedbackStyle.Heavy : Haptics.ImpactFeedbackStyle.Light);
+    HapticFeedback.trigger(style === 'heavy'? 'impactHeavy' : 'impactLight');
   } catch {}
 }
 
@@ -294,7 +294,7 @@ const WalletItem = ({ item, onPress }: {item: any, onPress: (i:any)=>void}) => {
   const scale = useSharedValue(1);
   const logo = useImage(item.logo);
 
-  const onPressIn = () => { scale.value = withTiming(0.95, {duration: 80}); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); }
+  const onPressIn = () => { scale.value = withTiming(0.95, {duration: 80}); HapticFeedback.trigger('impactLight'); }
   const onPressOut = () => { scale.value = withTiming(1, {duration: 120, easing: Easing.out(Easing.quad)}); }
   const style = useAnimatedStyle(() => ({ transform: [{scale: scale.value}] }));
 
