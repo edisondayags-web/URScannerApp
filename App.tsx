@@ -30,7 +30,7 @@ import { Canvas, RRect, RadialGradient, vec, Shadow, Image as SkImage, useImage 
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 import analytics from '@react-native-firebase/analytics';
-// import crashlytics from '@react-native-firebase/crashlytics'; // DISABLED
+import crashlytics from '@react-native-firebase/crashlytics'; // DISABLED
 // import appCheck from '@react-native-firebase/app-check'; // DISABLED
 // import { check, IntegrityErrorCode } from 'react-native-play-integrity'; // DISABLED
 
@@ -93,17 +93,17 @@ appId: FIREBASE_APP_ID,
 const db = firestore();
 const Crashlytics = {
 log: (msg: string) => {
-if (DEV) console.log('[LOG]', msg);
-// crashlytics().log(msg); // DISABLED
+if (__DEV__) console.log('[LOG]', msg);
+crashlytics().log(msg);
 // Sentry.addBreadcrumb({ message: msg, level: 'info' }); // ADDED: Sentry breadcrumb // DISABLED
 },
 recordError: (err: Error) => {
-if (DEV) console.error('[ERROR]', err);
-// crashlytics().recordError(err); // DISABLED
+if (__DEV__) console.error('[ERROR]', err);
+crashlytics().recordError(err);
 // Sentry.captureException(err); // ADDED: Sentry capture // DISABLED
 },
 setUserId: (id: string) => {
-// crashlytics().setUserId(id); // DISABLED
+crashlytics().setUserId(id);
 // crashlytics().setAttributes({ platform: Platform.OS, version: DeviceInfo.getVersion(), build: DeviceInfo.getBuildNumber() }); // DISABLED
 // Sentry.setUser({ id }); // ADDED: Sentry user // DISABLED
 },
