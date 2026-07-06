@@ -133,12 +133,12 @@ const WALLETS = [
   // { name: 'CIMB Bank', glow: '#FF3D00', deeplink: 'cimb://', fallback: 'https://www.cimbbank.com.ph', store: 'com.cimb.octo', logo: require('./assets/cimb.png') },
   // { name: 'TONIK', glow: '#00F5A0', deeplink: 'tonik://', fallback: 'https://tonikbank.com', store: 'com.tonik.mobile', logo: require('./assets/tonik.png') },
   // { name: 'ING Bank', glow: '#FF8C00', deeplink: 'ing://', fallback: 'https://ing.com.ph', store: 'com.ing.mobile', logo: require('./assets/ing.png') },
-  // { name: 'Robinsons Bank', glow: '#3A86FF', deeplink: 'robinsons://', fallback: 'https://www.robinsonsbank.com.ph', store: 'com.robinsonsbank.mobile', logo: require('./assets/robinsons.png') },
-  // { name: 'Bank of Commerce', glow: '#FF3D00', deeplink: 'bankcom://', fallback: 'https://www.bankcom.com.ph', store: 'com.bankcom.mobile', logo: require('./assets/bankcom.png') },
-  // { name: 'PBCOM', glow: '#9D4EDD', deeplink: 'pbcom://', fallback: 'https://www.pbcom.com.ph', store: 'com.pbcom.mobile', logo: require('./assets/pbcom.png') },
-  // { name: 'BOC', glow: '#FF8C00', deeplink: 'boc://', fallback: 'https://www.boc.com.ph', store: 'com.boc.mobile', logo: require('./assets/boc.png') },
-  // { name: 'Sterling Bank', glow: '#00F5A0', deeplink: 'sterling://', fallback: 'https://www.sterlingbankasia.com', store: 'com.sterling.mobile', logo: require('./assets/sterling.png') },
-  // { name: 'Malayan Bank', glow: '#3A86FF', deeplink: 'malayan://', fallback: 'https://www.malayanbank.com', store: 'com.malayan.mobile', logo: require('./assets/malayan.png') },
+  // { name: 'Robinsons Bank', glow: '#3A86FF', deeplink: 'robinsons://', fallback: 'https://www.robinsonsbank.com.ph', store: 'com.robinsonsbank.mobile'
+  // { name: 'Bank of Commerce', glow: '#FF3D00', deeplink: 'bankcom://', fallback: 'https://www.bankcom.com.ph', store: 'com.bankcom.mobile'
+  // { name: 'PBCOM', glow: '#9D4EDD', deeplink: 'pbcom://', fallback: 'https://www.pbcom.com.ph', store: 'com.pbcom.mobile'
+  // { name: 'BOC', glow: '#FF8C00', deeplink: 'boc://', fallback: 'https://www.boc.com.ph', store: 'com.boc.mobile' 
+  // { name: 'Sterling Bank', glow: '#00F5A0', deeplink: 'sterling://', fallback: 'https://www.sterlingbankasia.com', store: 'com.sterling.mobile'
+  // { name: 'Malayan Bank', glow: '#3A86FF', deeplink: 'malayan://', fallback: 'https://www.malayanbank.com', store: 'com.malayan.mobile'
 ];
 
 const WALLET_MAP = new Map(WALLETS.map((w) => [w.name, w]));
