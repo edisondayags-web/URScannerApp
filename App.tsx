@@ -113,26 +113,26 @@ const WALLETS = [
   { name: 'GrabPay', glow: '#00F5A0', deeplink: 'grab://', fallback: 'https://www.grab.com/ph/pay/', store: 'com.grabtaxi.passenger', logo: require('./assets/grab.png') },
 
   // ---------- DISABLED FOR NOW (26) — i-uncomment pag okay na ----------
-  // { name: 'Coins.ph', glow: '#FF8C00', deeplink: 'coins://', fallback: 'https://coins.ph', store: 'coins.ph', logo: require('./assets/coins.png') },
-  // { name: 'Starpay', glow: '#9D4EDD', deeplink: 'starpay://', fallback: 'https://starpay.com.ph', store: 'ph.starpay.app', logo: require('./assets/starpay.png') },
-  // { name: 'BDO', glow: '#3A86FF', deeplink: 'bdo://', fallback: 'https://www.bdo.com.ph/personal/digital-banking/mobile-banking', store: 'com.bdo.unibank', logo: require('./assets/bdo.png') },
-  // { name: 'BPI', glow: '#FF3D00', deeplink: 'bpi://', fallback: 'https://www.bpi.com.ph/personal/bank/online', store: 'com.bpi.mobile', logo: require('./assets/bpi.png') },
-  // { name: 'Metrobank', glow: '#3A86FF', deeplink: 'metrobank://', fallback: 'https://metrobank.com.ph', store: 'com.metrobank.mobile', logo: require('./assets/metro.png') },
-  // { name: 'UnionBank', glow: '#FF8C00', deeplink: 'unionbank://', fallback: 'https://www.unionbankph.com', store: 'com.unionbank.ph', logo: require('./assets/union.png') },
-  // { name: 'PNB', glow: '#9D4EDD', deeplink: 'pnb://', fallback: 'https://www.pnb.com.ph', store: 'com.pnb.mobile', logo: require('./assets/pnb.png') },
-  // { name: 'RCBC', glow: '#3A86FF', deeplink: 'rcbc://', fallback: 'https://www.rcbc.com', store: 'com.rcbc.mobile', logo: require('./assets/rcbc.png') },
-  // { name: 'Security Bank', glow: '#00F5A0', deeplink: 'securitybank://', fallback: 'https://www.securitybank.com', store: 'com.securitybank.mobile', logo: require('./assets/security.png') },
-  // { name: 'Chinabank', glow: '#FF3D00', deeplink: 'chinabank://', fallback: 'https://www.chinabank.ph', store: 'com.chinabank.mobile', logo: require('./assets/china.png') },
-  // { name: 'Landbank', glow: '#00F5A0', deeplink: 'landbank://', fallback: 'https://www.landbank.com', store: 'com.landbank.mobile', logo: require('./assets/landbank.png') },
-  // { name: 'PSBank', glow: '#FF8C00', deeplink: 'psbank://', fallback: 'https://www.psbank.com.ph', store: 'com.psbank.mobile', logo: require('./assets/psbank.png') },
-  // { name: 'EastWest Bank', glow: '#9D4EDD', deeplink: 'eastwest://', fallback: 'https://www.eastwestbanker.com', store: 'com.eastwestbank.mobile', logo: require('./assets/eastwest.png') },
-  // { name: 'AUB', glow: '#3A86FF', deeplink: 'aub://', fallback: 'https://www.aub.com.ph', store: 'com.aub.mobile', logo: require('./assets/aub.png') },
-  // { name: 'DBP', glow: '#00F5A0', deeplink: 'dbp://', fallback: 'https://www.dbp.ph', store: 'com.dbp.mobile', logo: require('./assets/dbp.png') },
-  // { name: 'Maybank', glow: '#FF3D00', deeplink: 'maybank://', fallback: 'https://www.maybank2u.com.ph', store: 'com.maybank2u.mobile', logo: require('./assets/maybank.png') },
-  // { name: 'UCPB', glow: '#9D4EDD', deeplink: 'ucpb://', fallback: 'https://www.ucpb.com', store: 'com.ucpb.mobile', logo: require('./assets/ucpb.png') },
-  // { name: 'CIMB Bank', glow: '#FF3D00', deeplink: 'cimb://', fallback: 'https://www.cimbbank.com.ph', store: 'com.cimb.octo', logo: require('./assets/cimb.png') },
-  // { name: 'TONIK', glow: '#00F5A0', deeplink: 'tonik://', fallback: 'https://tonikbank.com', store: 'com.tonik.mobile', logo: require('./assets/tonik.png') },
-  // { name: 'ING Bank', glow: '#FF8C00', deeplink: 'ing://', fallback: 'https://ing.com.ph', store: 'com.ing.mobile', logo: require('./assets/ing.png') },
+  // { name: 'Coins.ph', glow: '#FF8C00', deeplink: 'coins://', fallback: 'https://coins.ph', store: 'coins.ph'
+  // { name: 'Starpay', glow: '#9D4EDD', deeplink: 'starpay://', fallback: 'https://starpay.com.ph', store: 'ph.starpay.app'
+  // { name: 'BDO', glow: '#3A86FF', deeplink: 'bdo://', fallback: 'https://www.bdo.com.ph/personal/digital-banking/mobile-banking', store: 'com.bdo.unibank'
+  // { name: 'BPI', glow: '#FF3D00', deeplink: 'bpi://', fallback: 'https://www.bpi.com.ph/personal/bank/online', store: 'com.bpi.mobile'
+  // { name: 'Metrobank', glow: '#3A86FF', deeplink: 'metrobank://', fallback: 'https://metrobank.com.ph', store: 'com.metrobank.mobile'
+  // { name: 'UnionBank', glow: '#FF8C00', deeplink: 'unionbank://', fallback: 'https://www.unionbankph.com', store: 'com.unionbank.ph'
+  // { name: 'PNB', glow: '#9D4EDD', deeplink: 'pnb://', fallback: 'https://www.pnb.com.ph', store: 'com.pnb.mobile'
+  // { name: 'RCBC', glow: '#3A86FF', deeplink: 'rcbc://', fallback: 'https://www.rcbc.com', store: 'com.rcbc.mobile'
+  // { name: 'Security Bank', glow: '#00F5A0', deeplink: 'securitybank://', fallback: 'https://www.securitybank.com', store: 'com.securitybank.mobile'
+  // { name: 'Chinabank', glow: '#FF3D00', deeplink: 'chinabank://', fallback: 'https://www.chinabank.ph', store: 'com.chinabank.mobile'
+  // { name: 'Landbank', glow: '#00F5A0', deeplink: 'landbank://', fallback: 'https://www.landbank.com', store: 'com.landbank.mobile'
+  // { name: 'PSBank', glow: '#FF8C00', deeplink: 'psbank://', fallback: 'https://www.psbank.com.ph', store: 'com.psbank.mobile'
+  // { name: 'EastWest Bank', glow: '#9D4EDD', deeplink: 'eastwest://', fallback: 'https://www.eastwestbanker.com', store: 'com.eastwestbank.mobile'
+  // { name: 'AUB', glow: '#3A86FF', deeplink: 'aub://', fallback: 'https://www.aub.com.ph', store: 'com.aub.mobile'
+  // { name: 'DBP', glow: '#00F5A0', deeplink: 'dbp://', fallback: 'https://www.dbp.ph', store: 'com.dbp.mobile'
+  // { name: 'Maybank', glow: '#FF3D00', deeplink: 'maybank://', fallback: 'https://www.maybank2u.com.ph', store: 'com.maybank2u.mobile'
+  // { name: 'UCPB', glow: '#9D4EDD', deeplink: 'ucpb://', fallback: 'https://www.ucpb.com', store: 'com.ucpb.mobile'
+  // { name: 'CIMB Bank', glow: '#FF3D00', deeplink: 'cimb://', fallback: 'https://www.cimbbank.com.ph', store: 'com.cimb.octo'
+  // { name: 'TONIK', glow: '#00F5A0', deeplink: 'tonik://', fallback: 'https://tonikbank.com', store: 'com.tonik.mobile'
+  // { name: 'ING Bank', glow: '#FF8C00', deeplink: 'ing://', fallback: 'https://ing.com.ph', store: 'com.ing.mobile'
   // { name: 'Robinsons Bank', glow: '#3A86FF', deeplink: 'robinsons://', fallback: 'https://www.robinsonsbank.com.ph', store: 'com.robinsonsbank.mobile'
   // { name: 'Bank of Commerce', glow: '#FF3D00', deeplink: 'bankcom://', fallback: 'https://www.bankcom.com.ph', store: 'com.bankcom.mobile'
   // { name: 'PBCOM', glow: '#9D4EDD', deeplink: 'pbcom://', fallback: 'https://www.pbcom.com.ph', store: 'com.pbcom.mobile'
