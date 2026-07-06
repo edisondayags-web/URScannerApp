@@ -107,12 +107,10 @@ const RADIUS = 22;
 // ready ka na i-enable ulit sila. Walang binura, safe lahat.
 // ============================================================
 const WALLETS = [
-  { name: 'GCash', glow: '#3A86FF', deeplink: 'gcash://qrcode/scan', fallback: 'https://www.gcash.com', store: 'com.globe.gcash.android', logo: require('./assets/gcash.png') },
-  { name: 'Maya', glow: '#00F5A0', deeplink: 'maya://qr', fallback: 'https://www.maya.ph', store: 'com.paymaya', logo: require('./assets/maya.png') },
-  { name: 'ShopeePay', glow: '#FF3D00', deeplink: 'shopee://', fallback: 'https://shopee.ph', store: 'com.shopee.ph', logo: require('./assets/shopee.png') },
-  { name: 'GrabPay', glow: '#00F5A0', deeplink: 'grab://', fallback: 'https://www.grab.com/ph/pay/', store: 'com.grabtaxi.passenger', logo: require('./assets/grab.png') },
-
-  // ---------- DISABLED FOR NOW (26) — i-uncomment pag okay na ----------
+{ name: 'GCash', glow: '#3A86FF', deeplink: 'gcash://qrcode/scan', fallback: 'https://www.gcash.com', store: 'com.globe.gcash.android', logo: require('./assets/images/e-wallets/gcash.png') },
+{ name: 'Maya', glow: '#00F5A0', deeplink: 'maya://qr', fallback: 'https://www.maya.ph', store: 'com.paymaya', logo: require('./assets/images/e-wallets/maya.png') },
+{ name: 'ShopeePay', glow: '#FF3D00', deeplink: 'shopee://', fallback: 'https://shopee.ph', store: 'com.shopee.ph', logo: require('./assets/images/e-wallets/shopeepay.png') },
+{ name: 'GrabPay', glow: '#00F5A0', deeplink: 'grab://', fallback: 'https://www.grab.com/ph/pay/', store: 'com.grabtaxi.passenger', logo: require('./assets/images/e-wallets/grabpay.png') },
   // { name: 'Coins.ph', glow: '#FF8C00', deeplink: 'coins://', fallback: 'https://coins.ph', store: 'coins.ph'
   // { name: 'Starpay', glow: '#9D4EDD', deeplink: 'starpay://', fallback: 'https://starpay.com.ph', store: 'ph.starpay.app'
   // { name: 'BDO', glow: '#3A86FF', deeplink: 'bdo://', fallback: 'https://www.bdo.com.ph/personal/digital-banking/mobile-banking', store: 'com.bdo.unibank'
