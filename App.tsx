@@ -26,10 +26,10 @@ import { Canvas, RRect, RadialGradient, vec, Shadow, Image as SkImage, useImage 
 // Sentry / AppCheck / Play Integrity stay disabled — hindi kasama sa list mo.
 // import * as Sentry from '@sentry/react-native'; // DISABLED
 
-import firebase from '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
-import analytics from '@react-native-firebase/analytics';
-import crashlytics from '@react-native-firebase/crashlytics';
+//import firebase from '@react-native-firebase/app';
+//import firestore from '@react-native-firebase/firestore';
+//import analytics from '@react-native-firebase/analytics';
+//import crashlytics from '@react-native-firebase/crashlytics';
 // import appCheck from '@react-native-firebase/app-check'; // DISABLED
 // import { check, IntegrityErrorCode } from 'react-native-play-integrity'; // DISABLED
 
@@ -62,15 +62,15 @@ function triggerHaptic(style: 'light' | 'heavy' = 'light') {
   } catch {}
 }
 
-if (!firebase.apps.length) {
-  firebase.initializeApp({
-    apiKey: FIREBASE_API_KEY,
-    authDomain: FIREBASE_AUTH_DOMAIN,
-    projectId: FIREBASE_PROJECT_ID,
-    storageBucket: FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-    appId: FIREBASE_APP_ID,
-  });
+//if (!firebase.apps.length) {
+//  firebase.initializeApp({
+  //  apiKey: FIREBASE_API_KEY,
+//    authDomain: FIREBASE_AUTH_DOMAIN,
+    //projectId: FIREBASE_PROJECT_ID,
+   // storageBucket: FIREBASE_STORAGE_BUCKET,
+   // messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  //  appId: FIREBASE_APP_ID,
+  //});
   // App Check (Play Integrity) stays disabled for now
   // if (!__DEV__) {
   //   appCheck().initializeAppCheck({
@@ -78,7 +78,7 @@ if (!firebase.apps.length) {
   //     isTokenAutoRefreshEnabled: true,
   //   });
   // }
-}
+//}
 
 const db = firestore();
 const Crashlytics = {
