@@ -12,12 +12,11 @@ import HapticFeedback from 'react-native-haptic-feedback';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { LineChart } from 'react-native-chart-kit'; // ITEM 1: RE-ENABLED
+import { LineChart } from 'react-native-chart-kit';
 import Animated, {
   useSharedValue, withTiming, withRepeat, useAnimatedStyle, Easing,
   cancelAnimation, runOnJS, FadeIn, FadeOut,
 } from 'react-native-reanimated';
-import LottieView from 'lottie-react-native';
 import DeviceInfo from 'react-native-device-info';
 // import JailMonkey from 'jail-monkey'; // STAYS DISABLED (not in "need back" list)
 
@@ -26,6 +25,11 @@ import { Canvas, RRect, RadialGradient, vec, Shadow, Image as SkImage, useImage 
 // Sentry / AppCheck / Play Integrity stay disabled — hindi kasama sa list mo.
 // import * as Sentry from '@sentry/react-native'; // DISABLED
 
+// Firebase stays fully disabled for now (isolating crash cause, para
+// makapag-test si Edison). Kapag ready ka na i-enable, i-uncomment ang
+// 4 imports sa ibaba AT ang firebase.initializeApp() block sa baba,
+// AT tanggalin ang "const firestore" / "const analytics" stubs dahil
+// doble na sila kapag totoong firebase package na ang gagamitin.
 //import firebase from '@react-native-firebase/app';
 //import firestore from '@react-native-firebase/firestore';
 //import analytics from '@react-native-firebase/analytics';
@@ -41,19 +45,11 @@ import {
 const { width, height } = Dimensions.get('window');
 const storage = new MMKV();
 
-// Safe fallback background image (ITEM 14: ginagamit na sa Settings/QRList/LiveStats screens sa baba)
 let bgImage: any;
 try {
   bgImage = require('./assets/hoodie-bg.png');
 } catch {
   bgImage = { uri: 'https://via.placeholder.com/500' };
-}
-
-let scanSuccessAnimation: any;
-try {
-  scanSuccessAnimation = require('./assets/scan-success.json');
-} catch {
-  scanSuccessAnimation = null;
 }
 
 function triggerHaptic(style: 'light' | 'heavy' = 'light') {
@@ -71,7 +67,6 @@ function triggerHaptic(style: 'light' | 'heavy' = 'light') {
    // messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
   //  appId: FIREBASE_APP_ID,
   //});
-  // App Check (Play Integrity) stays disabled for now
   // if (!__DEV__) {
   //   appCheck().initializeAppCheck({
   //     provider: appCheck.PlayIntegrityAppCheckProvider,
@@ -80,19 +75,18 @@ function triggerHaptic(style: 'light' | 'heavy' = 'light') {
   // }
 //}
 
-const db = firestore();
+// STUBS: dahil naka-disable si Firebase, kailangan ng safe na fake
+// "firestore" at "analytics" para hindi mag-"undefined" crash kahit
+// saan pa sila tawagin. Walang totoong data na nase-save/nase-send
+// habang naka-stub 'to — safe para sa testing.
+const firestore: any = { FieldValue: { serverTimestamp: () => new Date(), increment: (n: number) => n } };
+const analytics: any = () => ({ logEvent: async () => {} });
+
+const db: any = { collection: () => ({ doc: () => ({ onSnapshot: () => () => {}, set: () => Promise.resolve(), update: () => Promise.resolve(), delete: () => Promise.resolve() }), add: () => Promise.resolve(), where: () => ({ orderBy: () => ({ get: () => Promise.resolve({ docs: [] }) }) }) }) };
 const Crashlytics = {
-  log: (msg: string) => {
-    if (__DEV__) console.log('[LOG]', msg);
-    crashlytics().log(msg);
-  },
-  recordError: (err: Error) => {
-    if (__DEV__) console.error('[ERROR]', err);
-    crashlytics().recordError(err);
-  },
-  setUserId: (id: string) => {
-    crashlytics().setUserId(id);
-  },
+  log: (msg: string) => { if (__DEV__) console.log('[LOG]', msg); },
+  recordError: (err: Error) => { if (__DEV__) console.error('[ERROR]', err); },
+  setUserId: (id: string) => {},
 };
 
 const brandPink = '#FF4D8D';
@@ -101,42 +95,11 @@ const CARD_W = (width - 48) / 3;
 const CARD_H = CARD_W + 50;
 const RADIUS = 22;
 
-// ============================================================
-// ITEM 10: 4 E-WALLETS LANG ANG ACTIVE. Yung 26 banks/wallets
-// nasa ibaba, commented out lang — i-uncomment mo na lang pag
-// ready ka na i-enable ulit sila. Walang binura, safe lahat.
-// ============================================================
 const WALLETS = [
-{ name: 'GCash', glow: '#3A86FF', deeplink: 'gcash://qrcode/scan', fallback: 'https://www.gcash.com', store: 'com.globe.gcash.android', logo: require('./assets/images/e-wallets/gcash.png') },
-{ name: 'Maya', glow: '#00F5A0', deeplink: 'maya://qr', fallback: 'https://www.maya.ph', store: 'com.paymaya', logo: require('./assets/images/e-wallets/maya.png') },
-{ name: 'ShopeePay', glow: '#FF3D00', deeplink: 'shopee://', fallback: 'https://shopee.ph', store: 'com.shopee.ph', logo: require('./assets/images/e-wallets/shopeepay.png') },
-{ name: 'GrabPay', glow: '#00F5A0', deeplink: 'grab://', fallback: 'https://www.grab.com/ph/pay/', store: 'com.grabtaxi.passenger', logo: require('./assets/images/e-wallets/grabpay.png') },
-  // { name: 'Coins.ph', glow: '#FF8C00', deeplink: 'coins://', fallback: 'https://coins.ph', store: 'coins.ph'
-  // { name: 'Starpay', glow: '#9D4EDD', deeplink: 'starpay://', fallback: 'https://starpay.com.ph', store: 'ph.starpay.app'
-  // { name: 'BDO', glow: '#3A86FF', deeplink: 'bdo://', fallback: 'https://www.bdo.com.ph/personal/digital-banking/mobile-banking', store: 'com.bdo.unibank'
-  // { name: 'BPI', glow: '#FF3D00', deeplink: 'bpi://', fallback: 'https://www.bpi.com.ph/personal/bank/online', store: 'com.bpi.mobile'
-  // { name: 'Metrobank', glow: '#3A86FF', deeplink: 'metrobank://', fallback: 'https://metrobank.com.ph', store: 'com.metrobank.mobile'
-  // { name: 'UnionBank', glow: '#FF8C00', deeplink: 'unionbank://', fallback: 'https://www.unionbankph.com', store: 'com.unionbank.ph'
-  // { name: 'PNB', glow: '#9D4EDD', deeplink: 'pnb://', fallback: 'https://www.pnb.com.ph', store: 'com.pnb.mobile'
-  // { name: 'RCBC', glow: '#3A86FF', deeplink: 'rcbc://', fallback: 'https://www.rcbc.com', store: 'com.rcbc.mobile'
-  // { name: 'Security Bank', glow: '#00F5A0', deeplink: 'securitybank://', fallback: 'https://www.securitybank.com', store: 'com.securitybank.mobile'
-  // { name: 'Chinabank', glow: '#FF3D00', deeplink: 'chinabank://', fallback: 'https://www.chinabank.ph', store: 'com.chinabank.mobile'
-  // { name: 'Landbank', glow: '#00F5A0', deeplink: 'landbank://', fallback: 'https://www.landbank.com', store: 'com.landbank.mobile'
-  // { name: 'PSBank', glow: '#FF8C00', deeplink: 'psbank://', fallback: 'https://www.psbank.com.ph', store: 'com.psbank.mobile'
-  // { name: 'EastWest Bank', glow: '#9D4EDD', deeplink: 'eastwest://', fallback: 'https://www.eastwestbanker.com', store: 'com.eastwestbank.mobile'
-  // { name: 'AUB', glow: '#3A86FF', deeplink: 'aub://', fallback: 'https://www.aub.com.ph', store: 'com.aub.mobile'
-  // { name: 'DBP', glow: '#00F5A0', deeplink: 'dbp://', fallback: 'https://www.dbp.ph', store: 'com.dbp.mobile'
-  // { name: 'Maybank', glow: '#FF3D00', deeplink: 'maybank://', fallback: 'https://www.maybank2u.com.ph', store: 'com.maybank2u.mobile'
-  // { name: 'UCPB', glow: '#9D4EDD', deeplink: 'ucpb://', fallback: 'https://www.ucpb.com', store: 'com.ucpb.mobile'
-  // { name: 'CIMB Bank', glow: '#FF3D00', deeplink: 'cimb://', fallback: 'https://www.cimbbank.com.ph', store: 'com.cimb.octo'
-  // { name: 'TONIK', glow: '#00F5A0', deeplink: 'tonik://', fallback: 'https://tonikbank.com', store: 'com.tonik.mobile'
-  // { name: 'ING Bank', glow: '#FF8C00', deeplink: 'ing://', fallback: 'https://ing.com.ph', store: 'com.ing.mobile'
-  // { name: 'Robinsons Bank', glow: '#3A86FF', deeplink: 'robinsons://', fallback: 'https://www.robinsonsbank.com.ph', store: 'com.robinsonsbank.mobile'
-  // { name: 'Bank of Commerce', glow: '#FF3D00', deeplink: 'bankcom://', fallback: 'https://www.bankcom.com.ph', store: 'com.bankcom.mobile'
-  // { name: 'PBCOM', glow: '#9D4EDD', deeplink: 'pbcom://', fallback: 'https://www.pbcom.com.ph', store: 'com.pbcom.mobile'
-  // { name: 'BOC', glow: '#FF8C00', deeplink: 'boc://', fallback: 'https://www.boc.com.ph', store: 'com.boc.mobile' 
-  // { name: 'Sterling Bank', glow: '#00F5A0', deeplink: 'sterling://', fallback: 'https://www.sterlingbankasia.com', store: 'com.sterling.mobile'
-  // { name: 'Malayan Bank', glow: '#3A86FF', deeplink: 'malayan://', fallback: 'https://www.malayanbank.com', store: 'com.malayan.mobile'
+  { name: 'GCash', glow: '#3A86FF', deeplink: 'gcash://qrcode/scan', fallback: 'https://www.gcash.com', store: 'com.globe.gcash.android', logo: require('./assets/images/e-wallets/gcash.png') },
+  { name: 'Maya', glow: '#00F5A0', deeplink: 'maya://qr', fallback: 'https://www.maya.ph', store: 'com.paymaya', logo: require('./assets/images/e-wallets/maya.png') },
+  { name: 'ShopeePay', glow: '#FF3D00', deeplink: 'shopee://', fallback: 'https://shopee.ph', store: 'com.shopee.ph', logo: require('./assets/images/e-wallets/shopeepay.png') },
+  { name: 'GrabPay', glow: '#00F5A0', deeplink: 'grab://', fallback: 'https://www.grab.com/ph/pay/', store: 'com.grabtaxi.passenger', logo: require('./assets/images/e-wallets/grabpay.png') },
 ];
 
 const WALLET_MAP = new Map(WALLETS.map((w) => [w.name, w]));
@@ -221,7 +184,6 @@ function isValidQRPH(data: string): boolean {
 type TimeFilter = 'Today' | '7 Days' | '30 Days' | 'All Time';
 type MerchantUI = { rank: number; name: string; scans: number; color: string; pct: string; };
 type QRHistoryItem = { name: string; data: string; date: string; };
-type SortType = 'newest' | 'oldest' | 'merchant';
 
 const PinkFadeText: React.FC<{ children: React.ReactNode; style?: any; size?: number; weight?: any; spacing?: number; }> = ({ children, style, size = 16, weight = '500', spacing = 0 }) => (
   <LinearGradient colors={['#FF4D8D', '#000']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={style}>
@@ -323,7 +285,6 @@ const WalletSelectScreen = ({ onSelect, onClose }: { onSelect: (w: any) => void,
   );
 };
 
-// ITEM 12/13/2/3: Live Stats screen — gumagamit ng LineChart + live_stats/presence onSnapshot data mula sa App()
 const LiveStatsScreen = ({
   onClose, liveStats, onlineUsers, chartData, timeFilter, setTimeFilter, lastUpdated,
 }: {
@@ -359,7 +320,6 @@ const LiveStatsScreen = ({
           ))}
         </View>
 
-        {/* ITEM 1 & 7: LineChart restored */}
         <LineChart
           data={chartData}
           width={width - 40}
@@ -485,7 +445,6 @@ const PrivacyScreen = ({ onClose }: { onClose: () => void }) => (
   </ImageBackground>
 );
 
-// ITEM 16: Explicit "Allow Camera" permission screen — dati, blangkong black screen lang pag walang permission
 const PermissionScreen = ({ onRequest }: { onRequest: () => void }) => (
   <View style={[styles.container, styles.permissionContainer]}>
     <MaterialIcon name="camera-off-outline" size={64} color={PINK} />
@@ -504,7 +463,6 @@ function App() {
   const devices = useCameraDevices();
   const device = devices.find((d) => d.position === 'back');
 
-  // ITEM 9: 4K -> 1080p (mas mababang chance mag-crash sa mas lumang devices)
   const format: CameraDeviceFormat | undefined = useMemo(() => {
     if (!device) return undefined;
     return device.formats
@@ -533,13 +491,12 @@ function App() {
   const [chartData, setChartData] = useState({ labels: ['No Data'], datasets: [{ data: [0] }] });
   const [onlineUsers, setOnlineUsers] = useState(0);
 
-  const scanLockRef = useRef(false);
-  const lastScannedDataRef = useRef('');
+  const scanLock = useSharedValue(false);
+  const lastScannedData = useSharedValue('');
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isMountedRef = useRef(true);
   const scale = useSharedValue(1);
   const scanSuccessScale = useSharedValue(0);
-  const lottieRef = useRef<LottieView>(null);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -553,8 +510,8 @@ function App() {
       loadSavedQRs();
       Crashlytics.setUserId(DeviceInfo.getUniqueIdSync());
       Crashlytics.log('UR Scanner launched');
-      await analytics().logEvent('app_open'); // ITEM 5: RE-ENABLED
-      retryPendingUploads(); // ITEM 6: RE-ENABLED
+      await analytics().logEvent('app_open');
+      retryPendingUploads();
     })();
 
     scale.value = withRepeat(withTiming(1.05, { duration: 5000, easing: Easing.inOut(Easing.sin) }), -1, true);
@@ -569,15 +526,14 @@ function App() {
     };
   }, []);
 
-  // ITEM 2, 3, 4, 12, 13: live_stats + presence onSnapshot RE-ENABLED
   useEffect(() => {
     const unsubStats = db.collection('live_stats').doc('summary').onSnapshot(
-      (snap) => { if (isMountedRef.current && snap.exists) setLiveStats(snap.data() as Record<string, number>); },
-      (err) => Crashlytics.recordError(err)
+      (snap: any) => { if (isMountedRef.current && snap.exists) setLiveStats(snap.data() as Record<string, number>); },
+      (err: Error) => Crashlytics.recordError(err)
     );
     const unsubOnline = db.collection('presence').onSnapshot(
-      (snap) => { if (isMountedRef.current) setOnlineUsers(snap.size); },
-      (err) => Crashlytics.recordError(err)
+      (snap: any) => { if (isMountedRef.current) setOnlineUsers(snap.size); },
+      (err: Error) => Crashlytics.recordError(err)
     );
     const userId = DeviceInfo.getUniqueIdSync();
     db.collection('presence').doc(userId).set({ lastSeen: firestore.FieldValue.serverTimestamp(), platform: Platform.OS });
@@ -593,7 +549,7 @@ function App() {
         startDate.setDate(startDate.getDate() - days);
         const snapshot = await db.collection('scan_logs').where('timestamp', '>=', startDate).orderBy('timestamp', 'asc').get();
         const dataPoints = new Map();
-        snapshot.docs.forEach(doc => {
+        snapshot.docs.forEach((doc: any) => {
           const data = doc.data();
           const date = data.timestamp.toDate();
           const key = timeFilter === 'Today' ? `${date.getHours()}:00` : timeFilter === '7 Days' ? date.toLocaleDateString('en-US', { weekday: 'short' }) : `Wk${Math.ceil(date.getDate() / 7)}`;
@@ -645,31 +601,37 @@ function App() {
     } catch (e) { Crashlytics.recordError(e instanceof Error ? e : new Error(String(e))); }
   }, []);
 
+  const handleScanSuccess = useCallback((data: string) => {
+    const merchant = extractMerchantName(data);
+    setCurrentQR(data);
+    saveQRToList(data);
+    setShowWalletSelect(true);
+    setLastUpdated(new Date().toLocaleString());
+    triggerHaptic('heavy');
+    Crashlytics.log('QR Scanned: ' + merchant);
+    analytics().logEvent('qr_scanned', { merchant });
+    db.collection('scan_logs').add({ merchant, timestamp: firestore.FieldValue.serverTimestamp(), platform: Platform.OS });
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      scanLock.value = false;
+      lastScannedData.value = '';
+    }, 1500);
+  }, [saveQRToList]);
+
   const codeScanner = useCodeScanner({
     codeTypes: ['qr'],
     onCodeScanned: (codes) => {
       'worklet';
-      if (scanLockRef.current || !codes.length) return;
+      if (scanLock.value || !codes.length) return;
       const data = codes[0].value;
-      if (!data || data === lastScannedDataRef.current) return;
-      runOnJS(setCurrentQR)(data);
-      runOnJS(saveQRToList)(data);
-      runOnJS(setShowWalletSelect)(true);
-      runOnJS(setLastUpdated)(new Date().toLocaleString());
+      if (!data || data === lastScannedData.value) return;
+      scanLock.value = true;
+      lastScannedData.value = data;
       scanSuccessScale.value = withTiming(1.2, { duration: 150 }, () => { scanSuccessScale.value = withTiming(0, { duration: 250 }); });
-      runOnJS(triggerHaptic)('heavy');
-      if (lottieRef.current) runOnJS(lottieRef.current.play)();
-      scanLockRef.current = true;
-      lastScannedDataRef.current = data;
-      runOnJS(Crashlytics.log)('QR Scanned: ' + extractMerchantName(data));
-      runOnJS(analytics().logEvent)('qr_scanned', { merchant: extractMerchantName(data) });
-      runOnJS(db.collection('scan_logs').add)({ merchant: extractMerchantName(data), timestamp: firestore.FieldValue.serverTimestamp(), platform: Platform.OS });
-      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-      debounceTimerRef.current = setTimeout(() => { scanLockRef.current = false; lastScannedDataRef.current = ''; }, 1500);
+      runOnJS(handleScanSuccess)(data);
     },
   });
 
-  // ITEM: kinumpleto ang truncated handleWalletSelect
   const handleWalletSelect = useCallback(async (wallet: any) => {
     triggerHaptic();
     const allowed = await firewallAllow();
@@ -721,7 +683,6 @@ function App() {
     }
   }, [currentQR]);
 
-  // ITEM 16: kung wala pang camera permission, ipakita ang Allow Camera screen sa halip na blangkong black screen
   if (!hasPermission) {
     return (
       <SafeAreaView style={styles.container}>
@@ -744,7 +705,6 @@ function App() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000" />
 
-      {/* ITEM 8: audio={false} — iniiwasan ang RECORD_AUDIO permission crash */}
       <Camera
         style={StyleSheet.absoluteFill}
         device={device}
@@ -778,12 +738,6 @@ function App() {
         <View style={[styles.corner, styles.bottomRight]} />
       </Animated.View>
       <Text style={styles.scanHint}>Point camera at QRPH code</Text>
-
-      {scanSuccessAnimation && (
-        <Animated.View style={[styles.lottieContainer, scanSuccessStyle]} pointerEvents="none">
-          <LottieView ref={lottieRef} source={scanSuccessAnimation} loop={false} style={{ width: 160, height: 160 }} />
-        </Animated.View>
-      )}
 
       <Modal visible={showWalletSelect} animationType="slide" transparent onRequestClose={() => setShowWalletSelect(false)}>
         <WalletSelectScreen onSelect={handleWalletSelect} onClose={() => setShowWalletSelect(false)} />
@@ -836,7 +790,6 @@ function App() {
   );
 }
 
-// ITEM 15: kompleto ang styles — container, bg, torch/topBtn, atbp. para di mag-crash pag naka-reference sa undefined style
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#000' },
   bg: { opacity: 0.15, resizeMode: 'cover' },
@@ -859,7 +812,6 @@ const styles = StyleSheet.create({
   bottomLeft: { bottom: 0, left: 0, borderBottomWidth: 4, borderLeftWidth: 4, borderBottomLeftRadius: 20 },
   bottomRight: { bottom: 0, right: 0, borderBottomWidth: 4, borderRightWidth: 4, borderBottomRightRadius: 20 },
   scanHint: { position: 'absolute', bottom: '25%', alignSelf: 'center', color: '#fff', fontSize: 15 },
-  lottieContainer: { position: 'absolute', alignSelf: 'center', top: '38%' },
 
   loadingOverlay: { flex: 1, backgroundColor: '#000000CC', justifyContent: 'center', alignItems: 'center' },
   loadingText: { color: '#fff', marginTop: 12, fontSize: 14 },
